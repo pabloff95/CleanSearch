@@ -7,24 +7,17 @@
 // preserved by Google while on the Web tab) is actively stripped so the
 // default "All" results with AI Overview are restored.
 
-const REDIRECT_RULE_ID = 1; // ON:  add udm=14 to /search URLs
-const ALLOW_RULE_ID = 2; // both: pass through tbm= (tab) URLs untouched
-const STRIP_RULE_ID = 3; // OFF: remove udm= from /search URLs
+import {
+  REDIRECT_RULE_ID,
+  ALLOW_RULE_ID,
+  STRIP_RULE_ID,
+  STORAGE_KEY,
+  SEARCH_REGEX,
+  TAB_REGEX,
+  UDM_REGEX,
+} from "./constants.js";
 
-const STORAGE_KEY = "active";
-
-// Match any Google /search URL with a query string, on any google.* TLD.
-const SEARCH_REGEX =
-  "^https?://(?:[a-z0-9-]+\\.)*google\\.[a-z.]+/search\\?";
-
-// Match Google /search URLs that target a specific tab (Images, Videos,
-// News, Shopping, Books, …). These use tbm= and must be left untouched.
-const TAB_REGEX =
-  "^https?://(?:[a-z0-9-]+\\.)*google\\.[a-z.]+/search\\?.*tbm=";
-
-// Match Google /search URLs that carry a udm= param (strip target when OFF).
-const UDM_REGEX =
-  "^https?://(?:[a-z0-9-]+\\.)*google\\.[a-z.]+/search\\?.*udm=";
+const ALL_RULE_IDS = [REDIRECT_RULE_ID, ALLOW_RULE_ID, STRIP_RULE_ID];
 
 /** @returns {chrome.declarativeNetRequest.Rule[]} */
 function buildActiveRules() {
@@ -91,8 +84,6 @@ function buildInactiveRules() {
     },
   ];
 }
-
-const ALL_RULE_IDS = [REDIRECT_RULE_ID, ALLOW_RULE_ID, STRIP_RULE_ID];
 
 /** Apply the DNR rules and the toolbar UI to match the active state. */
 async function applyState(active) {

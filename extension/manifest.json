@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CleanSearch",
   "version": "1.0.0",
-  "description": "Hides Google's AI Overview by redirecting searches to the Web results tab.",
+  "description": "Hides Google's AI Overview from your search results.",
   "permissions": ["declarativeNetRequest", "storage"],
   "host_permissions": [
     "*://*.google.com/*",
@@ -57,7 +57,8 @@
     "*://*.google.com.co/*"
   ],
   "background": {
-    "service_worker": "main.js"
+    "service_worker": "main.js",
+    "type": "module"
   },
   "action": {
     "default_title": "CleanSearch"

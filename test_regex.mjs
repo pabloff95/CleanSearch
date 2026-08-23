@@ -1,18 +1,25 @@
 // Verifies the DNR regex behavior that decides redirect vs allow vs strip.
-// Mirrors the three regexes in extension/main.js.
-const SEARCH_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?/;
-const TAB_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?.*tbm=/;
-const UDM_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?.*udm=/;
+// Imports the exact regex strings used by the extension's declarativeNetRequest
+// rules (constants.js) and wraps them with new RegExp() for testing.
+import {
+  SEARCH_REGEX,
+  TAB_REGEX,
+  UDM_REGEX,
+} from "./extension/constants.js";
+
+const SEARCH_RE = new RegExp(SEARCH_REGEX);
+const TAB_RE = new RegExp(TAB_REGEX);
+const UDM_RE = new RegExp(UDM_REGEX);
 
 // For each URL + state, decide the outcome.
 // ON  -> redirect (add udm=14), unless tbm= present (allow)
 // OFF -> strip udm if present (redirect w/ removeParams), unless tbm= (allow)
 function decision(url, active) {
-  if (!SEARCH_REGEX.test(url)) return "no-match";
-  if (TAB_REGEX.test(url)) return "allow"; // tab URLs always pass through
+  if (!SEARCH_RE.test(url)) return "no-match";
+  if (TAB_RE.test(url)) return "allow"; // tab URLs always pass through
   if (active) return "redirect-add";
   // OFF
-  if (UDM_REGEX.test(url)) return "strip-udm";
+  if (UDM_RE.test(url)) return "strip-udm";
   return "pass-through"; // no udm to strip, nothing to do
 }
 
