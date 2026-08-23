@@ -2,14 +2,12 @@
 // Imports the exact regex strings used by the extension's declarativeNetRequest
 // rules (constants.js) and wraps them with new RegExp() for testing.
 import {
-  SEARCH_REGEX,
-  TAB_REGEX,
-  UDM_REGEX,
+  GOOGLE_REGEX,
 } from "./extension/constants.js";
 
-const SEARCH_RE = new RegExp(SEARCH_REGEX);
-const TAB_RE = new RegExp(TAB_REGEX);
-const UDM_RE = new RegExp(UDM_REGEX);
+const SEARCH_RE = new RegExp(GOOGLE_REGEX.SEARCH);
+const TAB_RE = new RegExp(GOOGLE_REGEX.TAB);
+const UDM_RE = new RegExp(GOOGLE_REGEX.UDM);
 
 // For each URL + state, decide the outcome.
 // ON  -> redirect (add udm=14), unless tbm= present (allow)
