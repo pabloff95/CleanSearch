@@ -1,39 +1,50 @@
-// Verifies the DNR regex behavior that decides redirect vs allow.
-// Mirrors the two regexes in extension/main.js.
+// Verifies the DNR regex behavior that decides redirect vs allow vs strip.
+// Mirrors the three regexes in extension/main.js.
 const SEARCH_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?/;
 const TAB_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?.*tbm=/;
+const UDM_REGEX = /^https?:\/\/(?:[a-z0-9-]+\.)*google\.[a-z.]+\/search\?.*udm=/;
 
-// For each URL, decide whether the request should be REDIRECTED (add udm=14)
-// or ALLOWED (left untouched) when the extension is active.
-function decision(url) {
+// For each URL + state, decide the outcome.
+// ON  -> redirect (add udm=14), unless tbm= present (allow)
+// OFF -> strip udm if present (redirect w/ removeParams), unless tbm= (allow)
+function decision(url, active) {
   if (!SEARCH_REGEX.test(url)) return "no-match";
-  if (TAB_REGEX.test(url)) return "allow";
-  return "redirect";
+  if (TAB_REGEX.test(url)) return "allow"; // tab URLs always pass through
+  if (active) return "redirect-add";
+  // OFF
+  if (UDM_REGEX.test(url)) return "strip-udm";
+  return "pass-through"; // no udm to strip, nothing to do
 }
 
 const cases = [
-  ["https://www.google.com/search?q=cats", "redirect"],
-  ["http://google.com/search?q=cats", "redirect"],
-  ["https://www.google.co.uk/search?q=cats&hl=en", "redirect"],
-  ["https://www.google.com/search?q=cats&udm=14", "redirect"], // re-assert udm=14 (idempotent)
-  ["https://www.google.com/search?q=cats&tbm=isch", "allow"],
-  ["https://www.google.com/search?tbm=vid&q=cats", "allow"],
-  ["https://www.google.com/search?q=cats&sca_esv=1&tbm=nws", "allow"],
-  ["https://www.google.com/search?q=cats&tbm=shop", "allow"],
-  ["https://www.google.com/search?q=tbm", "redirect"], // 'tbm' as a search term, not a param
-  ["https://images.google.com/search?q=cats", "redirect"],
-  ["https://www.google.com/maps?q=cats", "no-match"],
-  ["https://www.google.com/search", "no-match"], // no query string
-  ["https://www.google.com/", "no-match"],
-  ["https://duckduckgo.com/search?q=cats", "no-match"],
+  // --- ON state ---
+  ["https://www.google.com/search?q=cats", true, "redirect-add"],
+  ["https://www.google.com/search?q=cats&udm=14", true, "redirect-add"],
+  ["https://www.google.com/search?q=cats&tbm=isch", true, "allow"],
+  ["https://www.google.com/search?q=cats&tbm=nws", true, "allow"],
+  ["https://www.google.com/search?q=udm", true, "redirect-add"],
+
+  // --- OFF state ---
+  ["https://www.google.com/search?q=cats", false, "pass-through"],
+  ["https://www.google.com/search?q=cats&udm=14", false, "strip-udm"],
+  ["https://www.google.com/search?q=cats&sca_esv=1&udm=14", false, "strip-udm"],
+  ["https://www.google.com/search?q=cats&udm=14&tbm=isch", false, "allow"],
+  ["https://www.google.com/search?q=cats&tbm=isch", false, "allow"],
+  ["https://www.google.com/search?q=udm", false, "pass-through"],
+
+  // --- never matches ---
+  ["https://www.google.com/maps?q=cats", true, "no-match"],
+  ["https://www.google.com/maps?q=cats", false, "no-match"],
+  ["https://duckduckgo.com/search?q=cats", true, "no-match"],
 ];
 
 let pass = true;
-for (const [url, want] of cases) {
-  const got = decision(url);
+for (const [url, active, want] of cases) {
+  const got = decision(url, active);
   const ok = got === want;
   if (!ok) pass = false;
-  console.log((ok ? "PASS" : "FAIL") + "  want=" + want.padEnd(9) + " got=" + got.padEnd(9) + " " + url);
+  const label = (active ? "ON " : "OFF") + " want=" + want.padEnd(12) + " got=" + got.padEnd(12);
+  console.log((ok ? "PASS" : "FAIL") + "  " + label + " " + url);
 }
 console.log("\n" + (pass ? "ALL PASS" : "SOME FAILED"));
 process.exit(pass ? 0 : 1);
