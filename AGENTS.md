@@ -9,12 +9,16 @@ CleanSearch is a Manifest V3 Chrome extension that hides Google's AI Overview fr
 - ES modules.
 - `declarativeNetRequest` (DNR) for request modification — no content scripts.
 - `chrome.storage.local` for persisted toggle state.
+- Jest for unit testing (dev dependency only; the extension itself ships no framework).
 
 ## Repository structure
 
 ```
 clean-search/
 ├── AGENTS.md                # This file
+├── package.json             # Root — Jest devDependency, `yarn test` script
+├── jest.config.js           # Jest config (ESM mode, no Babel)
+├── test/...                 # Jest test suites
 └── extension/
     ├── manifest.json        # MV3 manifest
     ├── main.js              # Service worker — Chrome event wiring only
@@ -64,3 +68,17 @@ Key design decisions:
 
 - Permissions must match the single purpose (hide AI Overview). `declarativeNetRequest` + `storage` only.
 - No data collection, no analytics, no remote code. The extension only modifies request URLs.
+
+## Testing
+
+The project uses Jest in native ESM mode (no Babel transform). Run the full suite from the repo root:
+
+```bash
+yarn test
+```
+
+### When adding tests
+
+- Add new `.test.js` files under `test/`.
+- Always import `jest` from `@jest/globals` in non-test helper modules.
+- Use `createChromeMock()` in `beforeEach` and assign `global.chrome` so each test starts with a fresh mock. Inspect calls via `chrome.<api>.mock.calls`.
