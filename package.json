@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Allows hiding or displaying Google's AI Overview from your search results. Open source project available at: https://github.com/pabloff95/CleanSearch",
+  "description": "Allows hiding or displaying Google's AI Overview from your search results. See project: https://github.com/pabloff95/CleanSearch",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build": "tsc",

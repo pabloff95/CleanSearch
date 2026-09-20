@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CleanSearch",
   "version": "1.0.0",
-  "description": "Allows hiding or displaying Google's AI Overview from your search results. Open source project available at: https://github.com/pabloff95/CleanSearch",
+  "description": "Allows hiding or displaying Google's AI Overview from your search results.",
   "permissions": ["declarativeNetRequest", "storage"],
   "host_permissions": [
     "*://*.google.com/*",
