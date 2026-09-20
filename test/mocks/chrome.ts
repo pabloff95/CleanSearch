@@ -23,6 +23,7 @@ export interface ChromeMock {
     setBadgeText: jest.Mock;
     setBadgeBackgroundColor: jest.Mock;
     setIcon: jest.Mock;
+    setTitle: jest.Mock;
     onClicked: {
       addListener: jest.Mock;
     };
@@ -59,6 +60,7 @@ export function createChromeMock(): { chrome: ChromeMock; listeners: MockListene
       setBadgeText: jest.fn(async () => undefined),
       setBadgeBackgroundColor: jest.fn(async () => undefined),
       setIcon: jest.fn(async () => undefined),
+      setTitle: jest.fn(async () => undefined),
       onClicked: {
         addListener: jest.fn((fn: Listener) => listeners.onClicked.push(fn)),
       },

@@ -91,6 +91,9 @@ export async function applyState(active: boolean): Promise<void> {
       128: `icons/${active ? "active" : "inactive"}-128.png`,
     },
   });
+  await chrome.action.setTitle({
+    title: active ? "AI overview is activated" : "AI overview is deactivated",
+  });
 }
 
 /** Read persisted state, defaulting to active if never set. */

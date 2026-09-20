@@ -80,22 +80,6 @@ describe("applyState", () => {
     expect(inactiveAllow.priority).toBeGreaterThan(inactiveRedirect.priority);
   });
 
-  test("active state sets ON badge with blue color", async () => {
-    await applyState(true);
-    expect(chrome.action.setBadgeText).toHaveBeenCalledWith({ text: "ON" });
-    expect(chrome.action.setBadgeBackgroundColor).toHaveBeenCalledWith({
-      color: "#1a73e8",
-    });
-  });
-
-  test("inactive state sets OFF badge with grey color", async () => {
-    await applyState(false);
-    expect(chrome.action.setBadgeText).toHaveBeenCalledWith({ text: "OFF" });
-    expect(chrome.action.setBadgeBackgroundColor).toHaveBeenCalledWith({
-      color: "#5f6368",
-    });
-  });
-
   test("active state sets active icons", async () => {
     await applyState(true);
     expect(chrome.action.setIcon).toHaveBeenCalledWith({
@@ -105,6 +89,20 @@ describe("applyState", () => {
         48: "icons/active-48.png",
         128: "icons/active-128.png",
       },
+    });
+  });
+
+  test("active state sets active tooltip", async () => {
+    await applyState(true);
+    expect(chrome.action.setTitle).toHaveBeenCalledWith({
+      title: "AI overview is activated",
+    });
+  });
+
+  test("inactive state sets inactive tooltip", async () => {
+    await applyState(false);
+    expect(chrome.action.setTitle).toHaveBeenCalledWith({
+      title: "AI overview is deactivated",
     });
   });
 
