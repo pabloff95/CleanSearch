@@ -83,11 +83,6 @@ export async function applyState(active: boolean): Promise<void> {
   } catch (err) {
     console.error("[CleanSearch] DNR rule update failed:", err);
   }
-
-  await chrome.action.setBadgeText({ text: active ? "ON" : "OFF" });
-  await chrome.action.setBadgeBackgroundColor({
-    color: active ? "#1a73e8" : "#5f6368",
-  });
   await chrome.action.setIcon({
     path: {
       16: `icons/${active ? "active" : "inactive"}-16.png`,
