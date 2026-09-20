@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "lib": ["ES2022", "DOM"],
+    "outDir": "extension/dist",
+    "rootDir": "extension/src",
+    "strict": true,
+    "noEmitOnError": true,
+    "declaration": false,
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["chrome"]
+  },
+  "include": ["extension/src/**/*.ts"],
+  "exclude": ["node_modules", "test", "extension/dist"]
+}
