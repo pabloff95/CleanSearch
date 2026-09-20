@@ -1,7 +1,10 @@
 echo "Building extension..."
 yarn build
+rm -rf extension/dist
+mkdir -p extension/dist
 cp extension/manifest.json extension/dist/manifest.json
 cp extension/package.json extension/dist/package.json
-rm -rf extension/dist/icons
 cp -r extension/icons extension/dist/icons
+cp LICENSE extension/dist/LICENSE
+cp PRIVACY.md extension/dist/PRIVACY.md
 echo "Extension build complete."
