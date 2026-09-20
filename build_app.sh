@@ -1,7 +1,7 @@
 echo "Building extension..."
-yarn build
 rm -rf extension/dist
 mkdir -p extension/dist
+yarn build
 cp extension/manifest.json extension/dist/manifest.json
 cp extension/package.json extension/dist/package.json
 cp -r extension/icons extension/dist/icons
