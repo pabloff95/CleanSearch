@@ -57,7 +57,7 @@
     "*://*.google.com.co/*"
   ],
   "background": {
-    "service_worker": "main.js",
+    "service_worker": "dist/main.js",
     "type": "module"
   },
   "action": {
