@@ -74,25 +74,27 @@ function buildInactiveRules(): chrome.declarativeNetRequest.Rule[] {
 }
 
 /** Apply the DNR rules and the toolbar UI to match the active state. */
-export async function applyState(active: boolean): Promise<void> {
+export async function applyState(isExtensionActive: boolean): Promise<void> {
+  const showAiOverview = !isExtensionActive;
+  
   try {
     await chrome.declarativeNetRequest.updateDynamicRules({
       removeRuleIds: Object.values(RULE_IDS),
-      addRules: active ? buildActiveRules() : buildInactiveRules(),
+      addRules: showAiOverview ? buildInactiveRules(): buildActiveRules(),
     });
   } catch (err) {
     console.error("[CleanSearch] DNR rule update failed:", err);
   }
   await chrome.action.setIcon({
     path: {
-      16: `icons/${active ? "active" : "inactive"}-16.png`,
-      32: `icons/${active ? "active" : "inactive"}-32.png`,
-      48: `icons/${active ? "active" : "inactive"}-48.png`,
-      128: `icons/${active ? "active" : "inactive"}-128.png`,
+      16: `icons/${showAiOverview ? "active" : "inactive"}-16.png`,
+      32: `icons/${showAiOverview ? "active" : "inactive"}-32.png`,
+      48: `icons/${showAiOverview ? "active" : "inactive"}-48.png`,
+      128: `icons/${showAiOverview ? "active" : "inactive"}-128.png`,
     },
   });
   await chrome.action.setTitle({
-    title: active ? "AI overview is activated" : "AI overview is deactivated",
+    title: showAiOverview ? "AI overview is activated" : "AI overview is deactivated",
   });
 }
 

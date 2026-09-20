@@ -81,40 +81,40 @@ describe("applyState", () => {
     expect(inactiveAllow.priority).toBeGreaterThan(inactiveRedirect.priority);
   });
 
-  test("active state sets active icons", async () => {
+  test("inactive extension sets inactive AI overview icons", async () => {
     await applyState(true);
-    expect(chrome.action.setIcon).toHaveBeenCalledWith({
-      path: {
-        16: "icons/active-16.png",
-        32: "icons/active-32.png",
-        48: "icons/active-48.png",
-        128: "icons/active-128.png",
-      },
-    });
-  });
-
-  test("active state sets active tooltip", async () => {
-    await applyState(true);
-    expect(chrome.action.setTitle).toHaveBeenCalledWith({
-      title: "AI overview is activated",
-    });
-  });
-
-  test("inactive state sets inactive tooltip", async () => {
-    await applyState(false);
-    expect(chrome.action.setTitle).toHaveBeenCalledWith({
-      title: "AI overview is deactivated",
-    });
-  });
-
-  test("inactive state sets inactive icons", async () => {
-    await applyState(false);
     expect(chrome.action.setIcon).toHaveBeenCalledWith({
       path: {
         16: "icons/inactive-16.png",
         32: "icons/inactive-32.png",
         48: "icons/inactive-48.png",
         128: "icons/inactive-128.png",
+      },
+    });
+  });
+
+  test("active extension sets deactivated AI overview tooltip", async () => {
+    await applyState(true);
+    expect(chrome.action.setTitle).toHaveBeenCalledWith({
+      title: "AI overview is deactivated",
+    });
+  });
+
+  test("inactive extension sets activated AI overview tooltip", async () => {
+    await applyState(false);
+    expect(chrome.action.setTitle).toHaveBeenCalledWith({
+      title: "AI overview is activated",
+    });
+  });
+
+  test("active extension sets deactivated AI overviewicons", async () => {
+    await applyState(false);
+    expect(chrome.action.setIcon).toHaveBeenCalledWith({
+      path: {
+        16: "icons/active-16.png",
+        32: "icons/active-32.png",
+        48: "icons/active-48.png",
+        128: "icons/active-128.png",
       },
     });
   });
