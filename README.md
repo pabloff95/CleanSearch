@@ -1,6 +1,6 @@
 # CleanSearch
 
-A lightweight, open-source Chrome extension that gives you control over Google's AI Overview in search results.
+A lightweight, open-source Chrome extension that gives you control over Google's AI Overview in search results. This extension is available in the [Chrome Web Store](https://chromewebstore.google.com/detail/cleansearch/ndfmddcbhlefiejimalmpbggpnjjjcga).
 
 ## What is CleanSearch?
 
@@ -24,7 +24,7 @@ CleanSearch is a Chrome extension that lets you toggle Google's AI Overview on a
 
 ### From Chrome Web Store
 
-[CleanSearch on Chrome Web Store](https://chrome.google.com/webstore)
+[CleanSearch on Chrome Web Store](https://chromewebstore.google.com/detail/cleansearch/ndfmddcbhlefiejimalmpbggpnjjjcga)
 
 1. Click "Add to Chrome"
 2. Confirm the permissions
