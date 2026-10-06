@@ -45,12 +45,30 @@ describe("regex", () => {
     });
   });
 
+  describe("GOOGLE_REGEX.SEARCH_MODE", () => {
+    const re = new RegExp(GOOGLE_REGEX.SEARCH_MODE);
+
+    test.each([
+      "https://www.google.com/search?q=cats&tbm=isch",
+      "https://www.google.com/search?q=cats&udm=2",
+      "https://www.google.com/search?q=cats&udm=7",
+      "https://www.google.com/search?q=cats&udm=14",
+    ])("matches %s", (url) => {
+      expect(re.test(url)).toBe(true);
+    });
+
+    test("does not match a regular search URL", () => {
+      expect(re.test("https://www.google.com/search?q=cats")).toBe(false);
+    });
+  });
+
   describe("GOOGLE_REGEX.UDM", () => {
     const re = new RegExp(GOOGLE_REGEX.UDM);
 
     test.each([
       "https://www.google.com/search?q=cats&udm=14",
       "https://www.google.com/search?q=cats&sca_esv=1&udm=14",
+      "https://www.google.com/search?udm=14&q=cats",
     ])("matches %s", (url) => {
       expect(re.test(url)).toBe(true);
     });
@@ -58,6 +76,10 @@ describe("regex", () => {
     test.each([
       "https://www.google.com/search?q=cats",
       "https://www.google.com/search?q=udm",
+      "https://www.google.com/search?q=cats&udm=2",
+      "https://www.google.com/search?q=cats&udm=7",
+      "https://www.google.com/search?q=cats&udm=140",
+      "https://www.google.com/search?q=cats&xudm=14",
     ])("does not match %s", (url) => {
       expect(re.test(url)).toBe(false);
     });
