@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CleanSearch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allows hiding or displaying Google's AI Overview from your search results.",
   "permissions": ["declarativeNetRequest", "storage"],
   "host_permissions": [
