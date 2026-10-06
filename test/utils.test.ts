@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeEach } from "@jest/globals";
 import { applyState, getIsExtensionActive } from "../extension/src/utils.js";
+import { GOOGLE_REGEX } from "../extension/src/constants.js";
 import { createChromeMock, type ChromeMock } from "./mocks/chrome.js";
 
 describe("applyState", () => {
@@ -37,6 +38,7 @@ describe("applyState", () => {
     expect(addRules[1].id).toBe(2);
     expect(addRules[1].priority).toBe(2);
     expect(addRules[1].action.type).toBe("allow");
+    expect(addRules[1].condition.regexFilter).toBe(GOOGLE_REGEX.SEARCH_MODE);
     expect(addRules[1].condition.resourceTypes).toEqual(["main_frame"]);
   });
 
@@ -53,12 +55,14 @@ describe("applyState", () => {
     expect(
       addRules[0].action.redirect.transform.queryTransform.removeParams
     ).toEqual(["udm"]);
+    expect(addRules[0].condition.regexFilter).toBe(GOOGLE_REGEX.UDM);
     expect(addRules[0].condition.resourceTypes).toEqual(["main_frame"]);
 
     // ALLOW rule (id 2, priority 2)
     expect(addRules[1].id).toBe(2);
     expect(addRules[1].priority).toBe(2);
     expect(addRules[1].action.type).toBe("allow");
+    expect(addRules[1].condition.regexFilter).toBe(GOOGLE_REGEX.TAB);
   });
 
   test("ALLOW rule always has higher priority than redirect/strip", async () => {

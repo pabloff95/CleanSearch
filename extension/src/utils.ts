@@ -6,7 +6,7 @@ import {
 const RULE_IDS = {
   REDIRECT: 1, // ON:  add udm=14 to /search URLs
   ALLOW: 2, // both: pass through tbm= (tab) URLs untouched
-  STRIP: 3, // OFF: remove udm= from /search URLs
+  STRIP: 3, // OFF: remove udm=14 from /search URLs
 } as const;
 
 function buildActiveRules(): chrome.declarativeNetRequest.Rule[] {
@@ -34,7 +34,7 @@ function buildActiveRules(): chrome.declarativeNetRequest.Rule[] {
       priority: 2,
       action: { type: "allow" },
       condition: {
-        regexFilter: GOOGLE_REGEX.TAB,
+        regexFilter: GOOGLE_REGEX.SEARCH_MODE,
         resourceTypes: ["main_frame"],
       },
     },
